@@ -5,8 +5,8 @@ import java.sql.Date;
 public class Gerente extends Trabajador {
 	private Date fechaOcupCargo;
 	
-	public Gerente(int numero, String nombre, String apellidos, String cI, String nivelEscolar, String cargo,Date fechaOcupCargo) {
-		super(numero, nombre, apellidos, cI, nivelEscolar, cargo);
+	public Gerente(int numero, String nombre, String apellidos, String cI, float salarioB, String nivelEscolar, String cargo,Date fechaOcupCargo) {
+		super(numero, nombre, apellidos, cI, salarioB, nivelEscolar, cargo);
 		setFechaOcupCargo(fechaOcupCargo);
 	}
 
@@ -14,8 +14,8 @@ public class Gerente extends Trabajador {
 		return fechaOcupCargo;
 	}
 
-	public void setFechaOcupCargo(Date fechaOcupCargo) {
-		this.fechaOcupCargo = fechaOcupCargo;
+	public void setFechaOcupCargo(java.util.Date date) {
+		this.fechaOcupCargo = (Date) date;
 	}
 
 }

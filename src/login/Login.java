@@ -1,6 +1,7 @@
-package gui.mainframes;
+package login;
 
 import java.awt.Color;
+import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,6 +16,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
@@ -22,12 +25,14 @@ import javax.swing.border.MatteBorder;
 import componentesVisuales.AvatarCircular;
 import componentesVisuales.BotonAnimacion;
 import componentesVisuales.Linea;
+import interfaz.Principal;
+import logica.TiendaDeComputadoras;
 
+import java.awt.Toolkit;
+import interfaz.Principal;
 public class Login extends JFrame {
 
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	private JPanel panelGeneral;
 	private JPasswordField passwordField;
@@ -35,13 +40,14 @@ public class Login extends JFrame {
 	private static String usuario = "informatica2024";
 	private static String pass = "1234";
 	private static boolean visible = false;
-	final interfaz.Principal principal = new interfaz.Principal();
+	private static Principal principal;
 	
 	public Login() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/gui/icons/logoPeque\u00F1o1.jpg")));
 		setUndecorated(true);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 485, 501);
+		setBounds(100, 100, 485, 548);
 		panelGeneral = new JPanel();
 		panelGeneral.setBackground(Color.WHITE);
 		panelGeneral.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -71,76 +77,45 @@ public class Login extends JFrame {
 				btnIniciar.setBackground(new Color(135, 206, 250));
 			}
 		});
-		btnIniciar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(!userField.getText().isEmpty() && !passwordField.getText().isEmpty()){
-					if(usuario.equals(userField.getText()) && pass.equals(passwordField.getText())){
-							setVisible(false);
-							principal.setVisible(true);
-						}
-						else
-							JOptionPane.showMessageDialog(null, "Nombre de usuario o contraseña incorrecta.", "ERROR", 0);
-				}
-				else
-					JOptionPane.showMessageDialog(null, "Por favor, rellene todos los campos.", "ERROR", 2);
-			}
-		});
+        btnIniciar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (!userField.getText().isEmpty() && !passwordField.getText().isEmpty()) {
+                    if (usuario.equals(userField.getText()) && pass.equals(passwordField.getText())) {
+                        setVisible(false);
+                        try {
+                            UIManager.setLookAndFeel("com.jtattoo.plaf.luna.LunaLookAndFeel");
+                        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e1) {
+                            e1.printStackTrace();
+                            JOptionPane.showMessageDialog(null, "Error al aplicar el LookAndFeel.", "ERROR", JOptionPane.ERROR_MESSAGE);
+                        }
+                        EventQueue.invokeLater(new Runnable() {
+                            public void run() {
+                                try {
+                                    if (principal == null) {
+                                        principal = new Principal(TiendaDeComputadoras.getInstancia());
+                                    }
+                                    principal.setLocationRelativeTo(null);
+                                    principal.setVisible(true);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Nombre de usuario o contraseña incorrecta.", "ERROR", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Por favor, rellene todos los campos.", "ERROR", JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        });
+ 
 		btnIniciar.setBackground(new Color(135, 206, 250));
 		btnIniciar.setFont(new Font("Tahoma", Font.BOLD, 16));
 		btnIniciar.setText("Iniciar Sesi\u00F3n");
 		btnIniciar.setColorEfecto(new Color(0, 255, 255));
 		btnIniciar.setBounds(159, 443, 156, 34);
 		panelGeneral.add(btnIniciar);
-
-		JPanel UpperBar = new JPanel();
-		UpperBar.setBackground(new Color(0, 153, 204));
-		UpperBar.setBounds(0, 0, 485, 23);
-		panelGeneral.add(UpperBar);
-		UpperBar.setLayout(null);
-
-		final JButton btnExit = new JButton("X");
-		btnExit.setBounds(458, 0, 27, 23);
-		UpperBar.add(btnExit);
-		btnExit.addMouseListener(new MouseAdapter() {
-			public void mouseEntered(MouseEvent e) {
-				btnExit.setBorder(new MatteBorder(3, 3, 3, 3, (Color.RED)));
-			}
-			public void mouseExited(MouseEvent e) {
-				btnExit.setBorder(null);
-			}
-		});
-		btnExit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int i = JOptionPane.showConfirmDialog(null, "¿Seguro que quiere salir?");
-				if(i == 0)
-					System.exit(0);
-			}
-		});
-		btnExit.setFocusable(false);
-		btnExit.setFont(new Font("Tahoma", Font.BOLD, 15));
-		btnExit.setBorder(null);
-		btnExit.setBackground(new Color(255, 127, 80));
-
-		final JButton btnMin = new JButton("-");
-		btnMin.setBounds(431, 0, 27, 24);
-		UpperBar.add(btnMin);
-		btnMin.addMouseListener(new MouseAdapter() {
-			public void mouseEntered(MouseEvent e) {
-				btnMin.setBorder(new MatteBorder(3, 3, 3, 3, (Color.LIGHT_GRAY)));
-			}
-			public void mouseExited(MouseEvent e) {
-				btnMin.setBorder(null);
-			}
-		});
-		btnMin.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				setExtendedState(ICONIFIED);
-			}
-		});
-		btnMin.setFocusable(false);
-		btnMin.setFont(new Font("Tahoma", Font.BOLD, 18));
-		btnMin.setBorder(null);
-		btnMin.setBackground(new Color(220, 220, 220));
 
 		Linea lineaPass = new Linea(0, 0);
 		lineaPass.setGrosor(5);

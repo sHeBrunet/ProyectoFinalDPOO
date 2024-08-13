@@ -1,8 +1,10 @@
 package main;
 
-import gui.mainframes.Login;
-
 import java.awt.EventQueue;
+
+import javax.swing.UIManager;
+
+import login.Login;
 
 public class Main {
 
@@ -10,6 +12,7 @@ public class Main {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					UIManager.setLookAndFeel("com.jtattoo.plaf.luna.LunaLookAndFeel");
 					Login frame = new Login();
 					frame.setVisible(true);
 				} catch (Exception e) {

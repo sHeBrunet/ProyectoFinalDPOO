@@ -1,479 +1,462 @@
 package interfaz;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.EventQueue;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
-	public class Principal extends JFrame {
+import com.sun.glass.events.WindowEvent;
 
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-		private JPanel PanelPrincipal;
-		/**
-		 * Create the frame.
-		 */
-		public Principal() {
-			setUndecorated(true);
-			setResizable(false);
-			setBounds(100, 100, 800, 680);
-			PanelPrincipal = new JPanel();
-			PanelPrincipal.setBackground(new Color(255, 255, 255));
-			PanelPrincipal.setBorder(new EmptyBorder(5, 5, 5, 5));
-			setContentPane(PanelPrincipal);
-			PanelPrincipal.setLayout(null);
-			final Motherboards motherboards = new Motherboards();
-			final Microprocesadores micros = new Microprocesadores();
-			final Fuentes fuentes = new Fuentes();
-			final Bocinas bocinas = new Bocinas();
-			final Chasis chasis = new Chasis();
-			final Discos discos = new Discos();
-			final MemoriasRAM ram = new MemoriasRAM();
-			final Monitor monitor = new Monitor();
-			final Mouse mouse = new Mouse();
-			final Otros otros = new Otros();
-			final TarjetaDeVideo tarjetas = new TarjetaDeVideo();
-			final Teclado teclado = new Teclado();
-			
-			JLabel Quest = new JLabel("Productos en venta:");
-			Quest.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 20));
-			Quest.setBounds(24, 51, 321, 33);
-			PanelPrincipal.add(Quest);
-			
-			JPanel PanelObjetos = new JPanel();
-			PanelObjetos.setBounds(24, 95, 750, 155);
-			PanelPrincipal.add(PanelObjetos);
-			PanelObjetos.setBackground(Color.WHITE);
-			PanelObjetos.setLayout(new GridLayout(1, 4, 5, 40));
-			
-			final JButton btnMotherboards = new JButton("");
-			btnMotherboards.setBorder(null);
-			btnMotherboards.addMouseListener(new MouseAdapter() {
-				public void mouseEntered(MouseEvent e) {
-					btnMotherboards.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(135, 206, 235)));
+import logica.TiendaDeComputadoras;
+import login.Login;
+
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.UIManager;
+import javax.swing.JLabel;
+import java.awt.Font;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+
+import java.awt.GridLayout;
+import javax.swing.ImageIcon;
+import java.awt.Color;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.SwingConstants;
+import java.awt.Toolkit;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+@SuppressWarnings("serial")
+
+public class Principal extends JFrame {
+	private TiendaDeComputadoras tiendaC;
+
+	private JPanel contentPane;
+	private JButton btnButtonTarjetaMadre;
+	private JButton btnButtonMicroprocesador;
+	private JButton btnButtonmemoriasRAM;
+	private JButton btnButtonTarjetasVideo;
+	private JButton btnButtonDiscosDuros;
+	private JButton btnButtonFuente;
+	private JButton btnButtonMonitores;
+	private JButton btnButtonTeclado;
+	private JButton btnButtonRaton;
+	private JButton btnButtonBocina;
+	private JButton btnButtonChasis;
+	private JButton btnButtonOtro;
+	private JMenuItem mntmNewMenuItem_2;
+	private JMenuItem mntmNewMenuItem_4;
+
+	/**
+	 * Launch the application.
+	 */
+
+	/**
+	 * Create the frame.
+	 */
+	public Principal(TiendaDeComputadoras tienda) {
+		tiendaC = tienda;
+		setTitle("S.A.D PC Store");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/gui/icons/logoPeque\u00F1o1.jpg")));
+		setResizable(false);
+		setBackground(Color.WHITE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 900, 746);
+
+
+
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setBackground(Color.WHITE);
+		setJMenuBar(menuBar);
+
+		JMenu mnNewMenu = new JMenu("Inicio");
+		mnNewMenu.setBackground(Color.WHITE);
+		menuBar.add(mnNewMenu);
+
+		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Cerrar Sesi\u00F3n");
+		mntmNewMenuItem_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				Login frame = new Login();
+				frame.setVisible(true);
+			}
+		});
+		mntmNewMenuItem_3.setBackground(Color.WHITE);
+		mnNewMenu.add(mntmNewMenuItem_3);
+
+		JMenuItem mntmNewMenuItem_5 = new JMenuItem("Cerrar Programa");
+		mntmNewMenuItem_5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		mnNewMenu.add(mntmNewMenuItem_5);
+
+		JMenu MenuProductos = new JMenu("Productos");
+		MenuProductos.setBackground(Color.WHITE);
+		menuBar.add(MenuProductos);
+
+		mntmNewMenuItem_4 = new JMenuItem("Vender Productos");
+		mntmNewMenuItem_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					ComprarPieza dialog = new ComprarPieza(Principal.this, tiendaC);
+					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					dialog.setLocationRelativeTo(null);
+					dialog.setVisible(true);
+				} catch (Throwable e3) {
+					e3.printStackTrace();
 				}
-				public void mouseExited(MouseEvent e) {
-					btnMotherboards.setBorder(null);
+			}
+		});
+		mntmNewMenuItem_4.setBackground(Color.WHITE);
+		MenuProductos.add(mntmNewMenuItem_4);
+
+		JMenuItem mntmNewMenuItem_14 = new JMenuItem("Agregar Productos ");
+		mntmNewMenuItem_14.setBackground(Color.WHITE);
+		MenuProductos.add(mntmNewMenuItem_14);
+
+		JMenuItem mntmNewMenuItem_15 = new JMenuItem("LIstado de Productos");
+		mntmNewMenuItem_15.setBackground(Color.WHITE);
+		MenuProductos.add(mntmNewMenuItem_15);
+
+		JMenu mnNewMenu_2 = new JMenu("Reportes");
+		mnNewMenu_2.setBackground(Color.WHITE);
+		menuBar.add(mnNewMenu_2);
+
+		JMenuItem mntmNewMenuItem = new JMenuItem("Dinero Recaudado");
+		mntmNewMenuItem.setBackground(Color.WHITE);
+		mnNewMenu_2.add(mntmNewMenuItem);
+
+		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Pago de los Trabajadores");
+		mntmNewMenuItem_1.setBackground(Color.WHITE);
+		mnNewMenu_2.add(mntmNewMenuItem_1);
+
+		JMenu mnNewMenu_3 = new JMenu("Trabajadores");
+		mnNewMenu_3.setBackground(Color.WHITE);
+		menuBar.add(mnNewMenu_3);
+
+		mntmNewMenuItem_2 = new JMenuItem("Listado");
+		mntmNewMenuItem_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					ListadoDeTrabajadores dialog = new ListadoDeTrabajadores(Principal.this, tiendaC);
+					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					dialog.setSize(900, 746); 
+					dialog.setLocationRelativeTo(null);
+					dialog.setVisible(true);
+				} catch (Exception e2) {
+					e2.printStackTrace();
 				}
-			});
-			btnMotherboards.setForeground(Color.BLACK);
-			btnMotherboards.setIcon(new ImageIcon(Principal.class.getResource("/gui/images/Motherboards/motherboard2.jpg")));
-			btnMotherboards.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					setVisible(false);
-					motherboards.setVisible(true);
+			}
+		});
+		mntmNewMenuItem_2.setBackground(Color.WHITE);
+		mnNewMenu_3.add(mntmNewMenuItem_2);
+
+		JMenuItem mntmNewMenuItem_16 = new JMenuItem("A\u00F1adir Trabajador");
+		mntmNewMenuItem_16.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					AgregarTrabajador dialog = new AgregarTrabajador(Principal.this, tiendaC);
+					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					dialog.setSize(900, 746); 
+					dialog.setLocationRelativeTo(null);
+					dialog.setVisible(true);
+				} catch (Exception e2) {
+					e2.printStackTrace();
 				}
-			});
-			btnMotherboards.setFont(new Font("Tahoma", Font.BOLD, 15));
-			btnMotherboards.setFocusable(false);
-			btnMotherboards.setBackground(new Color(255, 255, 255));
-			PanelObjetos.add(btnMotherboards);
-			
-			final JButton btnMicro = new JButton("");
-			btnMicro.setBorder(null);
-			btnMicro.addMouseListener(new MouseAdapter() {
-				public void mouseEntered(MouseEvent e) {
-					btnMicro.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(135, 206, 235)));
-				}
-				public void mouseExited(MouseEvent e) {
-					btnMicro.setBorder(null);
-				}
-			});
-			btnMicro.setIcon(new ImageIcon(Principal.class.getResource("/gui/images/Micro/micro1.jpg")));
-			btnMicro.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					setVisible(false);
-					micros.setVisible(true);
-				}
-			});
-			btnMicro.setFont(new Font("Tahoma", Font.BOLD, 15));
-			btnMicro.setFocusable(false);
-			btnMicro.setBackground(new Color(255, 255, 255));
-			PanelObjetos.add(btnMicro);
-			
-			final JButton btnRam = new JButton("");
-			btnRam.setBorder(null);
-			btnRam.addMouseListener(new MouseAdapter() {
-				public void mouseEntered(MouseEvent e) {
-					btnRam.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(135, 206, 235)));
-				}
-				public void mouseExited(MouseEvent e) {
-					btnRam.setBorder(null);
-				}
-			});
-			btnRam.setIcon(new ImageIcon(Principal.class.getResource("/gui/images/RAM/ram9.jpg")));
-			btnRam.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					setVisible(false);
-					ram.setVisible(true);
-				}
-			});
-			btnRam.setFont(new Font("Tahoma", Font.BOLD, 15));
-			btnRam.setFocusable(false);
-			btnRam.setBackground(new Color(255, 255, 255));
-			PanelObjetos.add(btnRam);
-			
-			final JButton btnTarjeta = new JButton("");
-			btnTarjeta.setBorder(null);
-			btnTarjeta.addMouseListener(new MouseAdapter() {
-				public void mouseEntered(MouseEvent e) {
-					btnTarjeta.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(135, 206, 235)));
-				}
-				public void mouseExited(MouseEvent e) {
-					btnTarjeta.setBorder(null);
-				}
-			});
-			PanelObjetos.add(btnTarjeta);
-			btnTarjeta.setIcon(new ImageIcon(Principal.class.getResource("/gui/images/Tarjetas/tarjetas3.jpg")));
-			btnTarjeta.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					setVisible(false);
-					tarjetas.setVisible(true);
-				}
-			});
-			btnTarjeta.setFont(new Font("Tahoma", Font.BOLD, 15));
-			btnTarjeta.setFocusable(false);
-			btnTarjeta.setBackground(new Color(255, 255, 255));
-			
-			JPanel PanelObjetos2 = new JPanel();
-			PanelObjetos2.setBackground(Color.WHITE);
-			PanelObjetos2.setBounds(24, 297, 750, 155);
-			PanelPrincipal.add(PanelObjetos2);
-			PanelObjetos2.setLayout(new GridLayout(1, 4, 5, 40));
-			
-			final JButton btnDiscos = new JButton("");
-			btnDiscos.setBorder(null);
-			btnDiscos.addMouseListener(new MouseAdapter() {
-				public void mouseEntered(MouseEvent e) {
-					btnDiscos.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(135, 206, 235)));
-				}
-				public void mouseExited(MouseEvent e) {
-					btnDiscos.setBorder(null);
-				}
-			});
-			PanelObjetos2.add(btnDiscos);
-			btnDiscos.setIcon(new ImageIcon(Principal.class.getResource("/gui/images/Discos/discos3.jpg")));
-			btnDiscos.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					setVisible(false);
-					discos.setVisible(true);
-				}
-			});
-			btnDiscos.setFont(new Font("Tahoma", Font.BOLD, 15));
-			btnDiscos.setFocusable(false);
-			btnDiscos.setBackground(new Color(255, 255, 255));
-			
-			final JButton btnFuente = new JButton("");
-			btnFuente.setBorder(null);
-			btnFuente.addMouseListener(new MouseAdapter() {
-				public void mouseEntered(MouseEvent e) {
-					btnFuente.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(135, 206, 235)));
-				}
-				public void mouseExited(MouseEvent e) {
-					btnFuente.setBorder(null);
-				}
-			});
-			PanelObjetos2.add(btnFuente);
-			btnFuente.setIcon(new ImageIcon(Principal.class.getResource("/gui/images/Fuentes/fuente4.jpg")));
-			btnFuente.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					setVisible(false);
-					setVisible(false);
-					fuentes.setVisible(true);
-				}
-			});
-			btnFuente.setFont(new Font("Tahoma", Font.BOLD, 15));
-			btnFuente.setFocusable(false);
-			btnFuente.setBackground(new Color(255, 255, 255));
-			
-			final JButton btnMonitor = new JButton("");
-			btnMonitor.setBorder(null);
-			btnMonitor.addMouseListener(new MouseAdapter() {
-				public void mouseEntered(MouseEvent e) {
-					btnMonitor.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(135, 206, 235)));
-				}
-				public void mouseExited(MouseEvent e) {
-					btnMonitor.setBorder(null);
-				}
-			});
-			PanelObjetos2.add(btnMonitor);
-			btnMonitor.setIcon(new ImageIcon(Principal.class.getResource("/gui/images/Monitores/monitor7.jpg")));
-			btnMonitor.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					setVisible(false);
-					monitor.setVisible(true);
-				}
-			});
-			btnMonitor.setFont(new Font("Tahoma", Font.BOLD, 15));
-			btnMonitor.setFocusable(false);
-			btnMonitor.setBackground(new Color(255, 255, 255));
-			
-			final JButton btnTeclado = new JButton("");
-			btnTeclado.setBorder(null);
-			btnTeclado.addMouseListener(new MouseAdapter() {
-				public void mouseEntered(MouseEvent e) {
-					btnTeclado.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(135, 206, 235)));
-				}
-				public void mouseExited(MouseEvent e) {
-					btnTeclado.setBorder(null);
-				}
-			});
-			btnTeclado.setHorizontalTextPosition(SwingConstants.CENTER);
-			btnTeclado.setIcon(new ImageIcon(Principal.class.getResource("/gui/images/Teclados/teclado1.jpg")));
-			PanelObjetos2.add(btnTeclado);
-			btnTeclado.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					setVisible(false);
-					teclado.setVisible(true);
-				}
-			});
-			btnTeclado.setFont(new Font("Tahoma", Font.BOLD, 15));
-			btnTeclado.setFocusable(false);
-			btnTeclado.setBackground(new Color(255, 255, 255));
-			
-			JPanel PanelObjetos3 = new JPanel();
-			PanelObjetos3.setBackground(Color.WHITE);
-			PanelObjetos3.setBounds(24, 503, 750, 155);
-			PanelPrincipal.add(PanelObjetos3);
-			PanelObjetos3.setLayout(new GridLayout(1, 4, 5, 40));
-			
-			final JButton btnMouse = new JButton("");
-			btnMouse.setBorder(null);
-			btnMouse.addMouseListener(new MouseAdapter() {
-				public void mouseEntered(MouseEvent e) {
-					btnMouse.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(135, 206, 235)));
-				}
-				public void mouseExited(MouseEvent e) {
-					btnMouse.setBorder(null);
-				}
-			});
-			btnMouse.setIcon(new ImageIcon(Principal.class.getResource("/gui/images/Mouse/mouse6.jpg")));
-			PanelObjetos3.add(btnMouse);
-			btnMouse.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					setVisible(false);
-					mouse.setVisible(true);
-				}
-			});
-			btnMouse.setFont(new Font("Tahoma", Font.BOLD, 15));
-			btnMouse.setFocusable(false);
-			btnMouse.setBackground(new Color(255, 255, 255));
-			
-			final JButton btnBocinas = new JButton("");
-			btnBocinas.setBorder(null);
-			btnBocinas.addMouseListener(new MouseAdapter() {
-				public void mouseEntered(MouseEvent e) {
-					btnBocinas.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(135, 206, 235)));
-				}
-				public void mouseExited(MouseEvent e) {
-					btnBocinas.setBorder(null);
-				}
-			});
-			btnBocinas.setIcon(new ImageIcon(Principal.class.getResource("/gui/images/Bocinas/bocinas13.jpg")));
-			PanelObjetos3.add(btnBocinas);
-			btnBocinas.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					setVisible(false);
-					bocinas.setVisible(true);
-				}
-			});
-			btnBocinas.setFont(new Font("Tahoma", Font.BOLD, 15));
-			btnBocinas.setFocusable(false);
-			btnBocinas.setBackground(new Color(255, 255, 255));
-			
-			final JButton btnChasis = new JButton("");
-			btnChasis.setBorder(null);
-			btnChasis.addMouseListener(new MouseAdapter() {
-				public void mouseEntered(MouseEvent e) {
-					btnChasis.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(135, 206, 235)));
-				}
-				public void mouseExited(MouseEvent e) {
-					btnChasis.setBorder(null);
-				}
-			});
-			btnChasis.setIcon(new ImageIcon(Principal.class.getResource("/gui/images/Chasis/chasis3.jpg")));
-			PanelObjetos3.add(btnChasis);
-			btnChasis.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					setVisible(false);
-					chasis.setVisible(true);
-				}
-			});
-			btnChasis.setFont(new Font("Tahoma", Font.BOLD, 15));
-			btnChasis.setFocusable(false);
-			btnChasis.setBackground(new Color(255, 255, 255));
-			
-			final JButton btnOtros = new JButton("");
-			btnOtros.setBorder(null);
-			btnOtros.addMouseListener(new MouseAdapter() {
-				public void mouseEntered(MouseEvent e) {
-					btnOtros.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(135, 206, 235)));
-				}
-				public void mouseExited(MouseEvent e) {
-					btnOtros.setBorder(null);
-				}
-			});
-			btnOtros.setIcon(new ImageIcon(Principal.class.getResource("/gui/images/Otros/otros4.jpg")));
-			PanelObjetos3.add(btnOtros);
-			btnOtros.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					setVisible(false);
-					otros.setVisible(true);
-				}
-			});
-			btnOtros.setFont(new Font("Tahoma", Font.BOLD, 15));
-			btnOtros.setFocusable(false);
-			btnOtros.setBackground(new Color(255, 255, 255));
-			
-			JPanel UpperBar = new JPanel();
-			UpperBar.setBackground(new Color(0, 153, 204));
-			UpperBar.setBounds(0, 0, 800, 23);
-			PanelPrincipal.add(UpperBar);
-			UpperBar.setLayout(null);
-			
-			final JButton btnExit = new JButton("X");
-			btnExit.addMouseListener(new MouseAdapter() {
-				public void mouseEntered(MouseEvent e) {
-					btnExit.setBorder(new MatteBorder(3, 3, 3, 3, (Color.RED)));
-				}
-				public void mouseExited(MouseEvent e) {
-					btnExit.setBorder(null);
-				}
-			});
-			btnExit.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					 int i = JOptionPane.showConfirmDialog(null, "Seguro que quiere salir?");
-	                 if(i==0)
-	                     System.exit(0);
-				}
-			});
-			btnExit.setFocusable(false);
-			btnExit.setFont(new Font("Tahoma", Font.BOLD, 15));
-			btnExit.setBorder(null);
-			btnExit.setBackground(new Color(255, 127, 80));
-			btnExit.setBounds(773, 0, 27, 23);
-			UpperBar.add(btnExit);
-			
-			final JButton btnMin = new JButton("-");
-			btnMin.addMouseListener(new MouseAdapter() {
-				public void mouseEntered(MouseEvent e) {
-					btnMin.setBorder(new MatteBorder(3, 3, 3, 3, (Color.LIGHT_GRAY)));
-				}
-				public void mouseExited(MouseEvent e) {
-					btnMin.setBorder(null);
-				}
-			});
-			btnMin.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					setExtendedState(ICONIFIED);
-				}
-			});
-			btnMin.setFocusable(false);
-			btnMin.setFont(new Font("Tahoma", Font.BOLD, 18));
-			btnMin.setBorder(null);
-			btnMin.setBackground(new Color(220, 220, 220));
-			btnMin.setBounds(746, -1, 27, 24);
-			UpperBar.add(btnMin);
-			
-			JPanel PanelNombreObj = new JPanel();
-			PanelNombreObj.setBackground(Color.WHITE);
-			PanelNombreObj.setBounds(24, 249, 750, 22);
-			PanelPrincipal.add(PanelNombreObj);
-			PanelNombreObj.setLayout(new GridLayout(1, 4, 0, 0));
-			
-			JLabel lbl1 = new JLabel("Motherboards");
-			lbl1.setFont(new Font("Tahoma", Font.BOLD, 15));
-			lbl1.setHorizontalAlignment(SwingConstants.CENTER);
-			PanelNombreObj.add(lbl1);
-			
-			JLabel lbl2 = new JLabel("Microprocesadores");
-			lbl2.setFont(new Font("Tahoma", Font.BOLD, 15));
-			lbl2.setHorizontalAlignment(SwingConstants.CENTER);
-			PanelNombreObj.add(lbl2);
-			
-			JLabel lbl3 = new JLabel("Memorias RAM");
-			lbl3.setFont(new Font("Tahoma", Font.BOLD, 15));
-			lbl3.setHorizontalAlignment(SwingConstants.CENTER);
-			PanelNombreObj.add(lbl3);
-			
-			JLabel lbl4 = new JLabel("Tarjetas de Video");
-			lbl4.setFont(new Font("Tahoma", Font.BOLD, 15));
-			lbl4.setHorizontalAlignment(SwingConstants.CENTER);
-			PanelNombreObj.add(lbl4);
-			
-			JPanel PanelNombreObj1 = new JPanel();
-			PanelNombreObj1.setBackground(Color.WHITE);
-			PanelNombreObj1.setBounds(24, 451, 750, 22);
-			PanelPrincipal.add(PanelNombreObj1);
-			PanelNombreObj1.setLayout(new GridLayout(1, 4, 0, 0));
-			
-			JLabel lbl5 = new JLabel("HDD/SDD");
-			lbl5.setFont(new Font("Tahoma", Font.BOLD, 15));
-			lbl5.setHorizontalAlignment(SwingConstants.CENTER);
-			PanelNombreObj1.add(lbl5);
-			
-			JLabel lbl6 = new JLabel("Fuentes");
-			lbl6.setFont(new Font("Tahoma", Font.BOLD, 15));
-			lbl6.setHorizontalAlignment(SwingConstants.CENTER);
-			PanelNombreObj1.add(lbl6);
-			
-			JLabel lbl7 = new JLabel("Monitores");
-			lbl7.setFont(new Font("Tahoma", Font.BOLD, 15));
-			lbl7.setHorizontalAlignment(SwingConstants.CENTER);
-			PanelNombreObj1.add(lbl7);
-			
-			JLabel lbl8 = new JLabel("Teclados");
-			lbl8.setFont(new Font("Tahoma", Font.BOLD, 15));
-			lbl8.setHorizontalAlignment(SwingConstants.CENTER);
-			PanelNombreObj1.add(lbl8);
-			
-			JPanel PanelNombreObj2 = new JPanel();
-			PanelNombreObj2.setBackground(Color.WHITE);
-			PanelNombreObj2.setBounds(24, 658, 750, 22);
-			PanelPrincipal.add(PanelNombreObj2);
-			PanelNombreObj2.setLayout(new GridLayout(1, 4, 0, 0));
-			
-			JLabel lbl9 = new JLabel("Mouse");
-			lbl9.setFont(new Font("Tahoma", Font.BOLD, 15));
-			lbl9.setHorizontalAlignment(SwingConstants.CENTER);
-			PanelNombreObj2.add(lbl9);
-			
-			JLabel lbl10 = new JLabel("Bocinas");
-			lbl10.setFont(new Font("Tahoma", Font.BOLD, 15));
-			lbl10.setHorizontalAlignment(SwingConstants.CENTER);
-			PanelNombreObj2.add(lbl10);
-			
-			JLabel lbl11 = new JLabel("Chasis");
-			lbl11.setFont(new Font("Tahoma", Font.BOLD, 15));
-			lbl11.setHorizontalAlignment(SwingConstants.CENTER);
-			PanelNombreObj2.add(lbl11);
-			
-			JLabel lbl12 = new JLabel("Otros");
-			lbl12.setFont(new Font("Tahoma", Font.BOLD, 15));
-			lbl12.setHorizontalAlignment(SwingConstants.CENTER);
-			PanelNombreObj2.add(lbl12);
-			
-			JLabel icono = new JLabel("");
-			icono.setIcon(new ImageIcon(Principal.class.getResource("/gui/icons/logoPeque\u00F1o1.jpg")));
-			icono.setBounds(695, 23, 81, 75);
-			PanelPrincipal.add(icono);
-			
-			setLocationRelativeTo(null);
-		}
+			}
+		});
+		mntmNewMenuItem_16.setBackground(Color.WHITE);
+		mnNewMenu_3.add(mntmNewMenuItem_16);
+		contentPane = new JPanel();
+		contentPane.setBackground(Color.WHITE);
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+
+		JPanel panel = new JPanel();
+		panel.setBackground(Color.WHITE);
+		panel.setBounds(0, 0, 892, 696);
+		contentPane.add(panel);
+		panel.setLayout(null);
+
+		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(Color.WHITE);
+		panel_1.setBounds(10, 64, 866, 149);
+		panel.add(panel_1);
+		panel_1.setLayout(new GridLayout(0, 4, 0, 0));
+
+		btnButtonTarjetaMadre = new JButton("New button");
+		btnButtonTarjetaMadre.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnButtonTarjetaMadre.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(135, 206, 235)));
+			}
+			public void mouseExited(MouseEvent e) {
+				btnButtonTarjetaMadre.setBorder(null);
+			}
+		});
+		btnButtonTarjetaMadre.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+			}
+		});
+		btnButtonTarjetaMadre.setIcon(new ImageIcon(Principal.class.getResource("/gui/images/Motherboards/motherboard2.jpg")));
+		panel_1.add(btnButtonTarjetaMadre);
+
+		btnButtonMicroprocesador = new JButton("New button");
+		btnButtonMicroprocesador.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnButtonMicroprocesador.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(135, 206, 235)));
+			}
+			public void mouseExited(MouseEvent e) {
+				btnButtonMicroprocesador.setBorder(null);
+
+
+			}
+		});
+		btnButtonMicroprocesador.setBackground(Color.WHITE);
+		btnButtonMicroprocesador.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnButtonMicroprocesador.setIcon(new ImageIcon(Principal.class.getResource("/gui/images/Micro/micro1.jpg")));
+		panel_1.add(btnButtonMicroprocesador);
+
+		btnButtonmemoriasRAM = new JButton("New button");
+		btnButtonmemoriasRAM.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnButtonmemoriasRAM.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(135, 206, 235)));
+			}
+			public void mouseExited(MouseEvent e) {
+				btnButtonmemoriasRAM.setBorder(null);
+
+			}
+		});
+		btnButtonmemoriasRAM.setIcon(new ImageIcon(Principal.class.getResource("/gui/images/RAM/ram9.jpg")));
+		panel_1.add(btnButtonmemoriasRAM);
+
+		btnButtonTarjetasVideo = new JButton("New button");
+		btnButtonTarjetasVideo.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnButtonTarjetasVideo.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(135, 206, 235)));
+			}
+			public void mouseExited(MouseEvent e) {
+				btnButtonTarjetasVideo.setBorder(null);
+
+			}
+		});
+		btnButtonTarjetasVideo.setIcon(new ImageIcon(Principal.class.getResource("/gui/images/Tarjetas/tarjetas3.jpg")));
+		panel_1.add(btnButtonTarjetasVideo);
+
+		JPanel panel_1_1 = new JPanel();
+		panel_1_1.setBackground(Color.WHITE);
+		panel_1_1.setBounds(10, 266, 866, 149);
+		panel.add(panel_1_1);
+		panel_1_1.setLayout(new GridLayout(0, 4, 0, 0));
+
+		btnButtonDiscosDuros = new JButton("New button");
+		btnButtonDiscosDuros.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnButtonDiscosDuros.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(135, 206, 235)));
+			}
+			public void mouseExited(MouseEvent e) {
+				btnButtonDiscosDuros.setBorder(null);
+
+			}
+		});
+		btnButtonDiscosDuros.setIcon(new ImageIcon(Principal.class.getResource("/gui/images/Discos/discos3.jpg")));
+		panel_1_1.add(btnButtonDiscosDuros);
+
+		btnButtonFuente = new JButton("New button");
+		btnButtonFuente.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnButtonFuente.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(135, 206, 235)));
+			}
+			public void mouseExited(MouseEvent e) {
+				btnButtonFuente.setBorder(null);
+			}
+		});
+		btnButtonFuente.setIcon(new ImageIcon(Principal.class.getResource("/gui/images/Fuentes/fuente4.jpg")));
+		panel_1_1.add(btnButtonFuente);
+
+		btnButtonMonitores = new JButton("New button");
+		btnButtonMonitores.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnButtonMonitores.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(135, 206, 235)));
+			}
+			public void mouseExited(MouseEvent e) {
+				btnButtonMonitores.setBorder(null);
+			}
+		});
+		btnButtonMonitores.setIcon(new ImageIcon(Principal.class.getResource("/gui/images/Monitores/monitor7.jpg")));
+		panel_1_1.add(btnButtonMonitores);
+
+		btnButtonTeclado = new JButton("New button");
+		btnButtonTeclado.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnButtonTeclado.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(135, 206, 235)));
+			}
+			public void mouseExited(MouseEvent e) {
+				btnButtonTeclado.setBorder(null);
+			}
+		});
+		btnButtonTeclado.setIcon(new ImageIcon(Principal.class.getResource("/gui/images/Teclados/teclados4.jpg")));
+		panel_1_1.add(btnButtonTeclado);
+
+		JPanel panel_1_2 = new JPanel();
+		panel_1_2.setBackground(Color.WHITE);
+		panel_1_2.setBounds(10, 468, 866, 149);
+		panel.add(panel_1_2);
+		panel_1_2.setLayout(new GridLayout(0, 4, 0, 0));
+
+		btnButtonRaton = new JButton("New button");
+		btnButtonRaton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnButtonRaton.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(135, 206, 235)));
+			}
+			public void mouseExited(MouseEvent e) {
+				btnButtonRaton.setBorder(null);
+			}
+		});
+		btnButtonRaton.setIcon(new ImageIcon(Principal.class.getResource("/gui/images/Mouse/mouse6.jpg")));
+		panel_1_2.add(btnButtonRaton);
+
+		btnButtonBocina = new JButton("New button");
+		btnButtonBocina.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnButtonBocina.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(135, 206, 235)));
+			}
+			public void mouseExited(MouseEvent e) {
+				btnButtonBocina.setBorder(null);
+			}
+		});
+		btnButtonBocina.setIcon(new ImageIcon(Principal.class.getResource("/gui/images/Bocinas/bocinas13.jpg")));
+		panel_1_2.add(btnButtonBocina);
+
+		btnButtonChasis = new JButton("New button");
+		btnButtonChasis.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnButtonChasis.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(135, 206, 235)));
+			}
+			public void mouseExited(MouseEvent e) {
+				btnButtonChasis.setBorder(null);
+			}
+		});
+		btnButtonChasis.setIcon(new ImageIcon(Principal.class.getResource("/gui/images/Chasis/chasis3.jpg")));
+		panel_1_2.add(btnButtonChasis);
+
+		btnButtonOtro = new JButton("New button");
+		btnButtonOtro.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnButtonOtro.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(135, 206, 235)));
+			}
+			public void mouseExited(MouseEvent e) {
+				btnButtonOtro.setBorder(null);
+			}
+		});
+		btnButtonOtro.setIcon(new ImageIcon(Principal.class.getResource("/gui/images/Otros/otros5.jpg")));
+		panel_1_2.add(btnButtonOtro);
+
+		JPanel panel_2 = new JPanel();
+		panel_2.setBackground(Color.WHITE);
+		panel_2.setBounds(10, 223, 866, 33);
+		panel.add(panel_2);
+		panel_2.setLayout(new GridLayout(0, 4, 0, 0));
+
+		JLabel lblNewLabel_1 = new JLabel("Tarjetas Madres");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_2.add(lblNewLabel_1);
+
+		JLabel lblNewLabel_1_1 = new JLabel("Microprocesadores");
+		lblNewLabel_1_1.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblNewLabel_1_1.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_2.add(lblNewLabel_1_1);
+
+		JLabel lblNewLabel_1_2 = new JLabel("Memorias RAM");
+		lblNewLabel_1_2.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblNewLabel_1_2.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_2.add(lblNewLabel_1_2);
+
+		JLabel lblNewLabel_1_3 = new JLabel("Tarjetas de Video");
+		lblNewLabel_1_3.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblNewLabel_1_3.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_2.add(lblNewLabel_1_3);
+
+		JPanel panel_2_1 = new JPanel();
+		panel_2_1.setBackground(Color.WHITE);
+		panel_2_1.setBounds(10, 425, 866, 33);
+		panel.add(panel_2_1);
+		panel_2_1.setLayout(new GridLayout(0, 4, 0, 0));
+
+		JLabel lblNewLabel_2 = new JLabel("Discos Duros");
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblNewLabel_2.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_2_1.add(lblNewLabel_2);
+
+		JLabel lblNewLabel_2_1 = new JLabel("Fuentes");
+		lblNewLabel_2_1.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblNewLabel_2_1.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_2_1.add(lblNewLabel_2_1);
+
+		JLabel lblNewLabel_2_2 = new JLabel("Monitores");
+		lblNewLabel_2_2.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblNewLabel_2_2.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_2_1.add(lblNewLabel_2_2);
+
+		JLabel lblNewLabel_2_3 = new JLabel("Teclados");
+		lblNewLabel_2_3.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblNewLabel_2_3.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_2_1.add(lblNewLabel_2_3);
+
+		JPanel panel_2_2 = new JPanel();
+		panel_2_2.setBackground(Color.WHITE);
+		panel_2_2.setBounds(10, 627, 866, 33);
+		panel.add(panel_2_2);
+		panel_2_2.setLayout(new GridLayout(0, 4, 0, 0));
+
+		JLabel lblNewLabel_2_4 = new JLabel("Ratones");
+		lblNewLabel_2_4.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblNewLabel_2_4.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_2_2.add(lblNewLabel_2_4);
+
+		JLabel lblNewLabel_2_5 = new JLabel("Bocinas");
+		lblNewLabel_2_5.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblNewLabel_2_5.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_2_2.add(lblNewLabel_2_5);
+
+		JLabel lblNewLabel_2_6 = new JLabel("Chasis");
+		lblNewLabel_2_6.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblNewLabel_2_6.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_2_2.add(lblNewLabel_2_6);
+
+		JLabel lblNewLabel_2_7 = new JLabel("Otros");
+		lblNewLabel_2_7.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblNewLabel_2_7.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_2_2.add(lblNewLabel_2_7);
+
+		JLabel lblNewLabel = new JLabel("Productos en Venta:");
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 23));
+		lblNewLabel.setBounds(10, 10, 293, 44);
+		panel.add(lblNewLabel);
 	}
-
+}

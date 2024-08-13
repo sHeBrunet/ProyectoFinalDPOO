@@ -7,19 +7,18 @@ public class Trabajador {
 	private String nombre;
 	private String apellidos;
 	private String CI;
-	private static float salarioBasico;
+	private float salarioBasico;
 	private String nivelEscolar;
 	private String cargo;
 
-	public Trabajador(int numero) {
-		this(numero, "", "", "", "", "");
-	}	
-	public Trabajador(int numero,String nombre, String apellidos, String cI, String nivelEscolar,
+
+	public Trabajador(int numero,String nombre, String apellidos, String cI, float salarioBasico, String nivelEscolar,
 			String cargo) {
 		this.numero = numero;
 		setNombre(nombre);
 		setApellidos(apellidos);
 		setCI(cI);
+		setSalarioBasico(salarioBasico);
 		setNivelEscolar(nivelEscolar);
 		setCargo(cargo);
 	}
@@ -49,29 +48,38 @@ public class Trabajador {
 		return CI;
 	}
 	public void setCI(String cI) {
-		// Verificar que el carnet tenga exactamente 11 dígitos
-		if (cI.length() != 11 || !cI.matches("\\d{11}")) {
-			throw new IllegalArgumentException("El carnet debe tener exactamente 11 dígitos numéricos.");
-		}
-
-		// Extraer año, mes y día
 		int anioNacimiento = Integer.parseInt(cI.substring(0, 2)) + 1950; // Asumimos que son años a partir de 1950
 		int mesNacimiento = Integer.parseInt(cI.substring(2, 4));
 		int diaNacimiento = Integer.parseInt(cI.substring(4, 6));
 
-		// Validar año de nacimiento
-		if (anioNacimiento < 1950) {
-			throw new IllegalArgumentException("El año de nacimiento debe ser a partir de 1950.");
-		}
+		if(!cI.equals(null)) {
+			if (cI.length() == 11) {
+				if (anioNacimiento > 1950) {
+					if (mesNacimiento >= 1 || mesNacimiento <= 12) {
+						if (validarDia(anioNacimiento, mesNacimiento, diaNacimiento)) {
+							this.CI = cI;
+						}
+						else {
+							throw new IllegalArgumentException("El día de nacimiento no es válido para el mes y año dados.");	
+						}
+					}
 
-		// Validar mes de nacimiento
-		if (mesNacimiento < 1 || mesNacimiento > 12) {
-			throw new IllegalArgumentException("El mes de nacimiento debe estar entre 01 y 12.");
-		}
+					else {
+						throw new IllegalArgumentException("El mes de nacimiento debe estar entre 01 y 12.");
+					}
+				}
 
-		// Validar día de nacimiento según el mes
-		if (!validarDia(anioNacimiento, mesNacimiento, diaNacimiento)) {
-			throw new IllegalArgumentException("El día de nacimiento no es válido para el mes y año dados.");
+				else{
+					throw new IllegalArgumentException("El año de nacimiento debe ser a partir de 1950.");
+				}
+			}
+			else {
+				throw new IllegalArgumentException("El carnet debe tener exactamente 11 dígitos numéricos.");
+			}
+		}
+		else {
+			throw new IllegalArgumentException("El carnet del trabajador no pueden estar vacíos");
+
 		}
 	}
 
@@ -112,8 +120,13 @@ public class Trabajador {
 	public float getSalarioBasico() {
 		return salarioBasico;
 	}
-	public static void setSalarioBasico(float salarioBasicoN) {
-		salarioBasico = salarioBasicoN;
+	public  void setSalarioBasico(float salarioBasicoN) {
+		if(salarioBasicoN > 0) {
+			salarioBasico = salarioBasicoN;
+		}
+		else {
+			throw new IllegalArgumentException("El salario básico debe de ser mayor que cero");
+		}
 	}
 	public String getNivelEscolar() {
 		return nivelEscolar;
@@ -150,5 +163,6 @@ public class Trabajador {
 		}
 
 	}
+
 
 }
