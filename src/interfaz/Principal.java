@@ -91,25 +91,26 @@ public class Principal extends JFrame {
 		mntmNewMenuItem_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-		            ManejoDeSesion manejo = ManejoDeSesion.getInstance();
-		            if (manejo != null) {
-		                manejo.cerrarSesion();
-		                dispose();
-		                Login frame = new Login();
-		                frame.setVisible(true);
-		            } else {
-		                System.out.println("ManejoDeSesion es null");
-		            }
-		        } catch (Exception ex) {
-		            ex.printStackTrace();
-		            JOptionPane.showMessageDialog(null, "Error al cerrar sesión.", "ERROR", JOptionPane.ERROR_MESSAGE);
-		        }
-		    }
+					ManejoDeSesion manejo = ManejoDeSesion.getInstance();
+					if (manejo != null) {
+						manejo.cerrarSesion();
+						dispose();
+						Login frame = new Login();
+						frame.setVisible(true);
+					} else {
+						System.out.println("ManejoDeSesion es null");
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Error al cerrar sesión.", "ERROR", JOptionPane.ERROR_MESSAGE);
+				}
+			}
 		});
 		mntmNewMenuItem_3.setBackground(Color.WHITE);
 		mnNewMenu.add(mntmNewMenuItem_3);
 
 		JMenuItem mntmNewMenuItem_5 = new JMenuItem("Cerrar Programa");
+		mntmNewMenuItem_5.setBackground(Color.WHITE);
 		mntmNewMenuItem_5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
@@ -118,6 +119,7 @@ public class Principal extends JFrame {
 		mnNewMenu.add(mntmNewMenuItem_5);
 
 		JMenuItem mntmNewMenuItem_6 = new JMenuItem("Informaci\u00F3n");
+		mntmNewMenuItem_6.setBackground(Color.WHITE);
 		mntmNewMenuItem_6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -153,10 +155,33 @@ public class Principal extends JFrame {
 		MenuProductos.add(mntmNewMenuItem_4);
 
 		JMenuItem mntmNewMenuItem_14 = new JMenuItem("Agregar Productos ");
+		mntmNewMenuItem_14.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					AgregarProducto dialog = new AgregarProducto(Principal.this, tiendaC);
+					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					dialog.setLocationRelativeTo(null);
+					dialog.setVisible(true);
+				} catch (Exception e5) {
+					e5.printStackTrace();
+				}
+			}
+		});
 		mntmNewMenuItem_14.setBackground(Color.WHITE);
 		MenuProductos.add(mntmNewMenuItem_14);
 
-		JMenuItem mntmNewMenuItem_15 = new JMenuItem("LIstado de Productos");
+		JMenuItem mntmNewMenuItem_15 = new JMenuItem("Listado de Productos");
+		mntmNewMenuItem_15.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					ListadoDeProductos dialog = new ListadoDeProductos(Principal.this, tiendaC);
+					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					dialog.setVisible(true);
+				} catch (Exception e6) {
+					e6.printStackTrace();
+				}
+			}
+		});
 		mntmNewMenuItem_15.setBackground(Color.WHITE);
 		MenuProductos.add(mntmNewMenuItem_15);
 
@@ -183,21 +208,21 @@ public class Principal extends JFrame {
 		mntmNewMenuItem_2 = new JMenuItem("Listado");
 		mntmNewMenuItem_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				 String user = ManejoDeSesion.getInstance().getUsername();
-				    if (user.equals("gerente2024")) {
-				        try {
-				            ListadoDeTrabajadores dialog = new ListadoDeTrabajadores(Principal.this, tiendaC);
-				            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-				            dialog.setSize(900, 746); 
-				            dialog.setLocationRelativeTo(null);
-				            dialog.setVisible(true);
-				        } catch (Exception e2) {
-				            e2.printStackTrace();
-				        }
-				    } else {
-				        JOptionPane.showMessageDialog(Principal.this, "Error. A este campo solo puede acceder el gerente");
-				    }
+				String user = ManejoDeSesion.getInstance().getUsername();
+				if (user.equals("gerente2024")) {
+					try {
+						ListadoDeTrabajadores dialog = new ListadoDeTrabajadores(Principal.this, tiendaC);
+						dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+						dialog.setSize(900, 746); 
+						dialog.setLocationRelativeTo(null);
+						dialog.setVisible(true);
+					} catch (Exception e2) {
+						e2.printStackTrace();
+					}
+				} else {
+					JOptionPane.showMessageDialog(Principal.this, "Error. A este campo solo puede acceder el gerente");
 				}
+			}
 		});
 		mntmNewMenuItem_2.setBackground(Color.WHITE);
 		mnNewMenu_3.add(mntmNewMenuItem_2);
@@ -205,21 +230,21 @@ public class Principal extends JFrame {
 		JMenuItem mntmNewMenuItem_16 = new JMenuItem("A\u00F1adir Trabajador");
 		mntmNewMenuItem_16.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				 String user = ManejoDeSesion.getInstance().getUsername();
-				    if (user.equals("gerente2024")) {
-				        try {
-				            AgregarTrabajador dialog = new AgregarTrabajador(Principal.this, tiendaC);
-				            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-				            dialog.setSize(900, 746); 
-				            dialog.setLocationRelativeTo(null);
-				            dialog.setVisible(true);
-				        } catch (Exception e2) {
-				            e2.printStackTrace();
-				        }
-				    } else {
-				        JOptionPane.showMessageDialog(Principal.this, "Error. A este campo solo puede acceder el gerente");
-				    }
+				String user = ManejoDeSesion.getInstance().getUsername();
+				if (user.equals("gerente2024")) {
+					try {
+						AgregarTrabajador dialog = new AgregarTrabajador(Principal.this, tiendaC);
+						dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+						dialog.setSize(900, 746); 
+						dialog.setLocationRelativeTo(null);
+						dialog.setVisible(true);
+					} catch (Exception e2) {
+						e2.printStackTrace();
+					}
+				} else {
+					JOptionPane.showMessageDialog(Principal.this, "Error. A este campo solo puede acceder el gerente");
 				}
+			}
 		});
 		mntmNewMenuItem_16.setBackground(Color.WHITE);
 		mnNewMenu_3.add(mntmNewMenuItem_16);

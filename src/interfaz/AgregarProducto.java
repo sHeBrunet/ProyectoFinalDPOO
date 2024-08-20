@@ -1,13 +1,9 @@
 package interfaz;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-import javax.swing.border.TitledBorder;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -17,13 +13,32 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SpinnerDateModel;
+import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
+
+import inicializaciones.InicializacionDeDatos;
+import logica.Gerente;
 import logica.TiendaDeComputadoras;
 import logica.Trabajador;
-import logica.Gerente;
-import inicializaciones.*;
 
-import java.util.ArrayList;
-public class AgregarTrabajador extends JDialog {
+public class AgregarProducto extends JDialog {
+
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPanel = new JPanel();
 	private JTextField numTrabajador;
@@ -50,7 +65,7 @@ public class AgregarTrabajador extends JDialog {
 	private ArrayList<Trabajador> trabaj;
 	private ArrayList<Integer> noT;
 
-	public AgregarTrabajador(Principal principal, TiendaDeComputadoras tiendaC) {
+	public AgregarProducto(Principal principal, TiendaDeComputadoras tiendaC) {
 		super(principal, true);
 
 		InicializacionDeDatos.crearTrabajadores(tiendaC);
@@ -207,13 +222,13 @@ public class AgregarTrabajador extends JDialog {
 				String nivelE = (String) NivelE.getSelectedItem();
 
 				if (numTrabajador.getText().trim().isEmpty()) {
-					JOptionPane.showMessageDialog(AgregarTrabajador.this, "El número de trabajador no puede estar vacío.");
+					JOptionPane.showMessageDialog(AgregarProducto.this, "El número de trabajador no puede estar vacío.");
 					datoIncorrecto = true;
 				} else {
 					try {
 						noTrabajador = Integer.parseInt(numTrabajador.getText().trim());
 					} catch (NumberFormatException ex) {
-						JOptionPane.showMessageDialog(AgregarTrabajador.this, "El número de trabajador debe ser un número válido.");
+						JOptionPane.showMessageDialog(AgregarProducto.this, "El número de trabajador debe ser un número válido.");
 						datoIncorrecto = true;
 					}
 				}
@@ -246,7 +261,7 @@ public class AgregarTrabajador extends JDialog {
 				}
 
 				if (datoIncorrecto) {
-					JOptionPane.showMessageDialog(AgregarTrabajador.this, "No pueden estar vacíos los campos marcados en rojo.");
+					JOptionPane.showMessageDialog(AgregarProducto.this, "No pueden estar vacíos los campos marcados en rojo.");
 				} else {
 					try {
 						float salario = Float.parseFloat(salarioB);
@@ -268,8 +283,8 @@ public class AgregarTrabajador extends JDialog {
 						trab = trabajador;
 						trabaj.add(trab);
 						noT.add(noTrabajador);
-						
-						JOptionPane.showMessageDialog(AgregarTrabajador.this, "Trabajador agregado a la tabla de manera satisfactoria");
+
+						JOptionPane.showMessageDialog(AgregarProducto.this, "Trabajador agregado a la tabla de manera satisfactoria");
 
 						if (cargo.equals("Gerente")) {
 							SimpleDateFormat formFecha = new SimpleDateFormat("dd/mm/yyyy");
@@ -281,7 +296,7 @@ public class AgregarTrabajador extends JDialog {
 						i++;
 						iniciarDatos();
 					} catch (NumberFormatException ex) {
-						JOptionPane.showMessageDialog(AgregarTrabajador.this, "El salario debe ser un número válido.");
+						JOptionPane.showMessageDialog(AgregarProducto.this, "El salario debe ser un número válido.");
 					}
 				}
 			}
@@ -325,20 +340,29 @@ public class AgregarTrabajador extends JDialog {
 				if (pos != -1) {
 					//tienda.eliminarTrabajador1(pos);
 					trabaj.remove(pos);
-					/* if(actualizarNo() != 0) {
-						
-					} */
-					numTrabajador.setText(String.valueOf(actualizarNo()));
+					/*if(actualizarNo() != 0) {
+						numTrabajador.setText(String.valueOf(actualizarNo()));
+					}*/
 					((DefaultTableModel) table.getModel()).removeRow(pos);
-					
 				} else {
-					JOptionPane.showMessageDialog(AgregarTrabajador.this, "Antes de eliminar debe de seleccionar un trabajador de la tabla");
+					JOptionPane.showMessageDialog(AgregarProducto.this, "Antes de eliminar debe de seleccionar un trabajador de la tabla");
 				}
 			}
 
-			private ArrayList<Trabajador> actualizarNo() {
-			    trabaj.remove(noTrabajador);
-				return trabaj;
+			private int actualizarNo() {
+				int j = 0;
+				int num = 0;
+				Integer o;
+				while(j < noT.size()) {
+						o = noT.get(j);
+						if(!trabaj.contains(o)) {
+							num = noT.get(j);
+						}
+						else {
+							j++;
+						}
+					}
+				return num;
 			}
 		});
 
@@ -369,7 +393,7 @@ public class AgregarTrabajador extends JDialog {
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(actualizarLista() == true) {
-					JOptionPane.showMessageDialog(AgregarTrabajador.this, "Cambios guardados satisfactoriamente");
+					JOptionPane.showMessageDialog(AgregarProducto.this, "Cambios guardados satisfactoriamente");
 				}
 			}
 		});
@@ -387,7 +411,7 @@ public class AgregarTrabajador extends JDialog {
 			act = true;
 		}
 		else {
-			JOptionPane.showMessageDialog(AgregarTrabajador.this, "No se ha realizado ningún cambio");
+			JOptionPane.showMessageDialog(AgregarProducto.this, "No se ha realizado ningún cambio");
 		}
 		return act;
 	}

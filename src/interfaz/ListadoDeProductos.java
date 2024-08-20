@@ -1,29 +1,30 @@
 package interfaz;
 
-import logica.Gerente;
-import logica.TiendaDeComputadoras;
-
-
-
-import logica.Trabajador;
 import java.awt.BorderLayout;
-import java.awt.Dialog;
 import java.awt.FlowLayout;
-import javax.swing.table.DefaultTableModel;
-
-import com.sun.glass.events.WindowEvent;
-
-
-import javax.swing.*;
-import inicializaciones.InicializacionDeDatos;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.awt.event.ActionEvent;
-public class ListadoDeTrabajadores extends JDialog {
 
-	private static final long serialVersionUID = 1L;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+
+import logica.Gerente;
+import logica.TiendaDeComputadoras;
+import logica.Trabajador;
+
+public class ListadoDeProductos extends JDialog {
+
+	private final JPanel contentPanel = new JPanel();
+
 	private TiendaDeComputadoras tienda;
 	private Principal p;
 	private JButton btnBorrar;
@@ -33,11 +34,11 @@ public class ListadoDeTrabajadores extends JDialog {
 	private DefaultTableModel model;
 	private JButton btnAceptar;
 
-	public ListadoDeTrabajadores(Principal principal, TiendaDeComputadoras t) {
+	public ListadoDeProductos(Principal principal, TiendaDeComputadoras t) {
 		super(principal, true);
 		p = principal;
 		tienda = t;
-		setTitle("Gerentes y Trabajadores");
+		setTitle("Listado de Productos");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setResizable(false);
 		setSize(900, 746);
@@ -80,7 +81,6 @@ public class ListadoDeTrabajadores extends JDialog {
 			}
 		});
 		panelBotones.add(btnAceptar);
-		
 		btnBorrar = new JButton("Borrar");
 		btnBorrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -94,7 +94,7 @@ public class ListadoDeTrabajadores extends JDialog {
 					tienda.eliminarTrabajador1(pos1);
 					((DefaultTableModel) tableGerentes.getModel()).removeRow(pos1);
 				} else {
-					JOptionPane.showMessageDialog(ListadoDeTrabajadores.this, "Antes de eliminar debe de seleccionar un trabajador de la tabla");
+					JOptionPane.showMessageDialog(ListadoDeProductos.this, "Antes de eliminar debe de seleccionar un trabajador de la tabla");
 				}
 			}
 		});
@@ -122,6 +122,5 @@ public class ListadoDeTrabajadores extends JDialog {
 			model.addRow(new Object[]{g.getNumero(), g.getNombre(), g.getApellidos(), g.getCI(), g.getSalarioBasico(), g.getNivelEscolar(), g.getCargo(), fecha});
 		}
 	}
-
-
 }
+

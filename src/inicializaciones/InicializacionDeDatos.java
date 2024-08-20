@@ -139,7 +139,7 @@ public class InicializacionDeDatos {
 	}
 	public static void datosTienda(TiendaDeComputadoras tienda) {
 		tienda.setNombre("S.A.D PC Store");
-		tienda.setID("SDA");
+		tienda.setID("SAD");
 		tienda.setDireccion("Juan Delgado # 551 e/ O'Farril y Avenida Acosta");
 		tienda.setTelefono("76417449");
 	}

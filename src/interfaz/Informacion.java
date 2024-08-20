@@ -88,39 +88,43 @@ public class Informacion extends JDialog {
 		lblNewLabel_1.setIcon(new ImageIcon(Informacion.class.getResource("/gui/icons/logoPeque\u00F1o1.jpg")));
 
 		direccionTienda = new JTextField();
+		direccionTienda.setOpaque(false);
 		direccionTienda.setBorder(new MatteBorder(0, 0, 2, 0, (Color) new Color(0, 0, 0)));
 		direccionTienda.setFont(new Font("Tahoma", Font.ITALIC, 15));
 		direccionTienda.setEditable(false);
-		direccionTienda.setBounds(209, 407, 332, 61);
+		direccionTienda.setBounds(209, 415, 332, 30);
 		contentPanel.add(direccionTienda);
 		direccionTienda.setColumns(10);
 
 		telefonoTiennda = new JTextField();
+		telefonoTiennda.setOpaque(false);
 		telefonoTiennda.setBorder(new MatteBorder(0, 0, 2, 0, (Color) new Color(0, 0, 0)));
 		telefonoTiennda.setFont(new Font("Tahoma", Font.ITALIC, 15));
 
 		telefonoTiennda.setEditable(false);
 		telefonoTiennda.setColumns(10);
-		telefonoTiennda.setBounds(209, 480, 104, 61);
+		telefonoTiennda.setBounds(209, 488, 104, 30);
 		contentPanel.add(telefonoTiennda);
 
 		IDTienda = new JTextField();
+		IDTienda.setOpaque(false);
 		IDTienda.setBorder(new MatteBorder(0, 0, 2, 0, (Color) new Color(0, 0, 0)));
 		IDTienda.setFont(new Font("Tahoma", Font.ITALIC, 15));
 
 
 		IDTienda.setEditable(false);
 		IDTienda.setColumns(10);
-		IDTienda.setBounds(483, 311, 58, 61);
+		IDTienda.setBounds(483, 319, 58, 30);
 		contentPanel.add(IDTienda);
 
 		nombreTienda = new JTextField();
+		nombreTienda.setOpaque(false);
 		nombreTienda.setBorder(new MatteBorder(0, 0, 2, 0, (Color) new Color(0, 0, 0)));
 		nombreTienda.setFont(new Font("Tahoma", Font.ITALIC, 15));
 		nombreTienda.setEditable(false);
 
 		nombreTienda.setColumns(10);
-		nombreTienda.setBounds(209, 311, 104, 61);
+		nombreTienda.setBounds(209, 319, 104, 30);
 		contentPanel.add(nombreTienda);
 
 		JLabel lblNewLabel_3 = new JLabel("Nombre:");
@@ -145,7 +149,7 @@ public class Informacion extends JDialog {
 
 		JLabel lblNewLabel_3_2_1_1 = new JLabel("Gerentes:");
 		lblNewLabel_3_2_1_1.setFont(new Font("Tahoma", Font.BOLD, 15));
-		lblNewLabel_3_2_1_1.setBounds(108, 582, 82, 61);
+		lblNewLabel_3_2_1_1.setBounds(108, 561, 82, 61);
 		contentPanel.add(lblNewLabel_3_2_1_1);
 
 		panelGerentes = new JPanel();
@@ -154,7 +158,7 @@ public class Informacion extends JDialog {
 		contentPanel.add(panelGerentes);
 		tableGerentes = new JTable(modelGerentes);
 		scrollPane = new JScrollPane(tableGerentes);
-		scrollPane.setBounds(209, 582, 590, 61);
+		scrollPane.setBounds(209, 561, 590, 61);
 		contentPanel.add(scrollPane);
 		
 		JLabel lblNewLabel_2 = new JLabel("New label");
