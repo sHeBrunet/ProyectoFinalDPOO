@@ -1,6 +1,7 @@
 package interfaz;
 
 import logica.Gerente;
+import logica.TiendaDeComputadoras;
 
 
 
@@ -12,7 +13,7 @@ import javax.swing.table.DefaultTableModel;
 
 import com.sun.glass.events.WindowEvent;
 
-import logica.TiendaDeComputadoras;
+
 import javax.swing.*;
 import inicializaciones.InicializacionDeDatos;
 import java.awt.event.ActionListener;
@@ -63,7 +64,7 @@ public class ListadoDeTrabajadores extends JDialog {
 		btnAtras = new JButton("Atrás");
 		btnAtras.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				dispose();
+				setVisible(false);
 			}
 		});
 
@@ -74,6 +75,10 @@ public class ListadoDeTrabajadores extends JDialog {
 		getContentPane().add(panelBotones, BorderLayout.SOUTH);
 		
 		btnAceptar = new JButton("Aceptar");
+		btnAceptar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		panelBotones.add(btnAceptar);
 		btnBorrar = new JButton("Borrar");
 		btnBorrar.addActionListener(new ActionListener() {
@@ -81,10 +86,11 @@ public class ListadoDeTrabajadores extends JDialog {
 				int pos = tableTrabajadores.getSelectedRow();
 				int pos1 = tableGerentes.getSelectedRow();
 				if (pos != -1) {
-					tienda.eliminarTrabajador(pos);
+					Object t = tableTrabajadores.getValueAt(pos, 0);
+					tienda.eliminarTrabajador1(pos);
 					((DefaultTableModel) tableTrabajadores.getModel()).removeRow(pos);
 				} else if (pos1 != -1) {
-					tienda.eliminarTrabajador(pos1);
+					tienda.eliminarTrabajador1(pos1);
 					((DefaultTableModel) tableGerentes.getModel()).removeRow(pos1);
 				} else {
 					JOptionPane.showMessageDialog(ListadoDeTrabajadores.this, "Antes de eliminar debe de seleccionar un trabajador de la tabla");

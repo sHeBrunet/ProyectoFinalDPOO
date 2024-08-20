@@ -1,0 +1,10 @@
+JPanel panelBotones = new JPanel();
+		btnAtras = new JButton("Atrás");
+		panelBotones.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		panelBotones.add(btnAtras);
+
+		getContentPane().add(tabbedPane, BorderLayout.CENTER);
+		getContentPane().add(panelBotones, BorderLayout.SOUTH);
+		
+		btnAceptar = new JButton("Aceptar");
+		panelBotones.add(btnAceptar);

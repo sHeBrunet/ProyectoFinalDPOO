@@ -9,12 +9,14 @@ import javax.swing.border.MatteBorder;
 
 import com.sun.glass.events.WindowEvent;
 
+import logica.ManejoDeSesion;
 import logica.TiendaDeComputadoras;
 import login.Login;
 
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -32,10 +34,13 @@ import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
+import login.Login;
+import javax.swing.JTextField;
 @SuppressWarnings("serial")
 
 public class Principal extends JFrame {
 	private TiendaDeComputadoras tiendaC;
+	private ManejoDeSesion manejo;
 
 	private JPanel contentPane;
 	private JButton btnButtonTarjetaMadre;
@@ -52,15 +57,18 @@ public class Principal extends JFrame {
 	private JButton btnButtonOtro;
 	private JMenuItem mntmNewMenuItem_2;
 	private JMenuItem mntmNewMenuItem_4;
-
 	/**
 	 * Launch the application.
 	 */
 
 	/**
 	 * Create the frame.
+	 * @param manejoDeSesion 
+	 * @param password1 
+	 * @param user 
 	 */
-	public Principal(TiendaDeComputadoras tienda) {
+	public Principal(TiendaDeComputadoras tienda, ManejoDeSesion manejoDeSesion) {
+		manejo = manejoDeSesion;
 		tiendaC = tienda;
 		setTitle("S.A.D PC Store");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/gui/icons/logoPeque\u00F1o1.jpg")));
@@ -82,10 +90,21 @@ public class Principal extends JFrame {
 		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Cerrar Sesi\u00F3n");
 		mntmNewMenuItem_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				dispose();
-				Login frame = new Login();
-				frame.setVisible(true);
-			}
+				try {
+		            ManejoDeSesion manejo = ManejoDeSesion.getInstance();
+		            if (manejo != null) {
+		                manejo.cerrarSesion();
+		                dispose();
+		                Login frame = new Login();
+		                frame.setVisible(true);
+		            } else {
+		                System.out.println("ManejoDeSesion es null");
+		            }
+		        } catch (Exception ex) {
+		            ex.printStackTrace();
+		            JOptionPane.showMessageDialog(null, "Error al cerrar sesión.", "ERROR", JOptionPane.ERROR_MESSAGE);
+		        }
+		    }
 		});
 		mntmNewMenuItem_3.setBackground(Color.WHITE);
 		mnNewMenu.add(mntmNewMenuItem_3);
@@ -97,6 +116,21 @@ public class Principal extends JFrame {
 			}
 		});
 		mnNewMenu.add(mntmNewMenuItem_5);
+
+		JMenuItem mntmNewMenuItem_6 = new JMenuItem("Informaci\u00F3n");
+		mntmNewMenuItem_6.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Informacion dialog = new Informacion(Principal.this, tienda);
+					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					dialog.setLocationRelativeTo(null);
+					dialog.setVisible(true);
+				} catch (Exception e4) {
+					e4.printStackTrace();
+				}
+			}
+		});
+		mnNewMenu.add(mntmNewMenuItem_6);
 
 		JMenu MenuProductos = new JMenu("Productos");
 		MenuProductos.setBackground(Color.WHITE);
@@ -135,6 +169,10 @@ public class Principal extends JFrame {
 		mnNewMenu_2.add(mntmNewMenuItem);
 
 		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Pago de los Trabajadores");
+		mntmNewMenuItem_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {	
+			}
+		});
 		mntmNewMenuItem_1.setBackground(Color.WHITE);
 		mnNewMenu_2.add(mntmNewMenuItem_1);
 
@@ -145,16 +183,21 @@ public class Principal extends JFrame {
 		mntmNewMenuItem_2 = new JMenuItem("Listado");
 		mntmNewMenuItem_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					ListadoDeTrabajadores dialog = new ListadoDeTrabajadores(Principal.this, tiendaC);
-					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-					dialog.setSize(900, 746); 
-					dialog.setLocationRelativeTo(null);
-					dialog.setVisible(true);
-				} catch (Exception e2) {
-					e2.printStackTrace();
+				 String user = ManejoDeSesion.getInstance().getUsername();
+				    if (user.equals("gerente2024")) {
+				        try {
+				            ListadoDeTrabajadores dialog = new ListadoDeTrabajadores(Principal.this, tiendaC);
+				            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+				            dialog.setSize(900, 746); 
+				            dialog.setLocationRelativeTo(null);
+				            dialog.setVisible(true);
+				        } catch (Exception e2) {
+				            e2.printStackTrace();
+				        }
+				    } else {
+				        JOptionPane.showMessageDialog(Principal.this, "Error. A este campo solo puede acceder el gerente");
+				    }
 				}
-			}
 		});
 		mntmNewMenuItem_2.setBackground(Color.WHITE);
 		mnNewMenu_3.add(mntmNewMenuItem_2);
@@ -162,16 +205,21 @@ public class Principal extends JFrame {
 		JMenuItem mntmNewMenuItem_16 = new JMenuItem("A\u00F1adir Trabajador");
 		mntmNewMenuItem_16.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					AgregarTrabajador dialog = new AgregarTrabajador(Principal.this, tiendaC);
-					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-					dialog.setSize(900, 746); 
-					dialog.setLocationRelativeTo(null);
-					dialog.setVisible(true);
-				} catch (Exception e2) {
-					e2.printStackTrace();
+				 String user = ManejoDeSesion.getInstance().getUsername();
+				    if (user.equals("gerente2024")) {
+				        try {
+				            AgregarTrabajador dialog = new AgregarTrabajador(Principal.this, tiendaC);
+				            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+				            dialog.setSize(900, 746); 
+				            dialog.setLocationRelativeTo(null);
+				            dialog.setVisible(true);
+				        } catch (Exception e2) {
+				            e2.printStackTrace();
+				        }
+				    } else {
+				        JOptionPane.showMessageDialog(Principal.this, "Error. A este campo solo puede acceder el gerente");
+				    }
 				}
-			}
 		});
 		mntmNewMenuItem_16.setBackground(Color.WHITE);
 		mnNewMenu_3.add(mntmNewMenuItem_16);
@@ -194,6 +242,8 @@ public class Principal extends JFrame {
 		panel_1.setLayout(new GridLayout(0, 4, 0, 0));
 
 		btnButtonTarjetaMadre = new JButton("New button");
+		btnButtonTarjetaMadre.setBorder(null);
+		btnButtonTarjetaMadre.setFocusable(false);
 		btnButtonTarjetaMadre.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -212,6 +262,8 @@ public class Principal extends JFrame {
 		panel_1.add(btnButtonTarjetaMadre);
 
 		btnButtonMicroprocesador = new JButton("New button");
+		btnButtonMicroprocesador.setBorder(null);
+		btnButtonMicroprocesador.setFocusable(false);
 		btnButtonMicroprocesador.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -232,6 +284,8 @@ public class Principal extends JFrame {
 		panel_1.add(btnButtonMicroprocesador);
 
 		btnButtonmemoriasRAM = new JButton("New button");
+		btnButtonmemoriasRAM.setBorder(null);
+		btnButtonmemoriasRAM.setFocusable(false);
 		btnButtonmemoriasRAM.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -246,6 +300,8 @@ public class Principal extends JFrame {
 		panel_1.add(btnButtonmemoriasRAM);
 
 		btnButtonTarjetasVideo = new JButton("New button");
+		btnButtonTarjetasVideo.setBorder(null);
+		btnButtonTarjetasVideo.setFocusable(false);
 		btnButtonTarjetasVideo.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -266,6 +322,8 @@ public class Principal extends JFrame {
 		panel_1_1.setLayout(new GridLayout(0, 4, 0, 0));
 
 		btnButtonDiscosDuros = new JButton("New button");
+		btnButtonDiscosDuros.setBorder(null);
+		btnButtonDiscosDuros.setFocusable(false);
 		btnButtonDiscosDuros.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -280,6 +338,8 @@ public class Principal extends JFrame {
 		panel_1_1.add(btnButtonDiscosDuros);
 
 		btnButtonFuente = new JButton("New button");
+		btnButtonFuente.setBorder(null);
+		btnButtonFuente.setFocusable(false);
 		btnButtonFuente.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -293,6 +353,8 @@ public class Principal extends JFrame {
 		panel_1_1.add(btnButtonFuente);
 
 		btnButtonMonitores = new JButton("New button");
+		btnButtonMonitores.setBorder(null);
+		btnButtonMonitores.setFocusable(false);
 		btnButtonMonitores.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -306,6 +368,8 @@ public class Principal extends JFrame {
 		panel_1_1.add(btnButtonMonitores);
 
 		btnButtonTeclado = new JButton("New button");
+		btnButtonTeclado.setBorder(null);
+		btnButtonTeclado.setFocusable(false);
 		btnButtonTeclado.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -325,6 +389,8 @@ public class Principal extends JFrame {
 		panel_1_2.setLayout(new GridLayout(0, 4, 0, 0));
 
 		btnButtonRaton = new JButton("New button");
+		btnButtonRaton.setBorder(null);
+		btnButtonRaton.setFocusable(false);
 		btnButtonRaton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -338,6 +404,8 @@ public class Principal extends JFrame {
 		panel_1_2.add(btnButtonRaton);
 
 		btnButtonBocina = new JButton("New button");
+		btnButtonBocina.setBorder(null);
+		btnButtonBocina.setFocusable(false);
 		btnButtonBocina.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -351,6 +419,8 @@ public class Principal extends JFrame {
 		panel_1_2.add(btnButtonBocina);
 
 		btnButtonChasis = new JButton("New button");
+		btnButtonChasis.setBorder(null);
+		btnButtonChasis.setFocusable(false);
 		btnButtonChasis.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -364,6 +434,8 @@ public class Principal extends JFrame {
 		panel_1_2.add(btnButtonChasis);
 
 		btnButtonOtro = new JButton("New button");
+		btnButtonOtro.setBorder(null);
+		btnButtonOtro.setFocusable(false);
 		btnButtonOtro.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {

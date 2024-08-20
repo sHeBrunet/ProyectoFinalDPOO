@@ -5,6 +5,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,7 +22,7 @@ import logica.Trabajador;
 import logica.Gerente;
 import inicializaciones.*;
 
-
+import java.util.ArrayList;
 public class AgregarTrabajador extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPanel = new JPanel();
@@ -32,7 +34,6 @@ public class AgregarTrabajador extends JDialog {
 	private JComboBox<String> NivelE;
 	private JComboBox<String> cargoT;
 	private JSpinner spinnerFecha;
-	private JButton btnAgregar;
 	private JButton btnEliminar;
 	private JTable table;
 	private DefaultTableModel tableModel;
@@ -44,15 +45,23 @@ public class AgregarTrabajador extends JDialog {
 	private Trabajador trab;
 	private JPanel panel_1;
 	private JButton btnAtrs;
+	private int noTrabajador = 0;
+	private int i = 1;
+	private ArrayList<Trabajador> trabaj;
+	private ArrayList<Integer> noT;
 
 	public AgregarTrabajador(Principal principal, TiendaDeComputadoras tiendaC) {
 		super(principal, true);
+
 		InicializacionDeDatos.crearTrabajadores(tiendaC);
 		InicializacionDeDatos.crearGerentes(tiendaC);
-
-		setTitle("Manejo de trabajadores");
+		
+		trabaj = new ArrayList<Trabajador>();
+		noT = new ArrayList<Integer>();
 		p = principal;
 		tienda = tiendaC;
+		
+		setTitle("Manejo de trabajadores");
 		setBounds(100, 100, 900, 746);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBackground(Color.WHITE);
@@ -67,7 +76,7 @@ public class AgregarTrabajador extends JDialog {
 		panel.setLayout(null);
 
 		JPanel panelAgregarTrabajadores = new JPanel();
-		panelAgregarTrabajadores.setBounds(116, 87, 751, 296);
+		panelAgregarTrabajadores.setBounds(29, 87, 837, 296);
 		panelAgregarTrabajadores.setForeground(UIManager.getColor("Button.frame"));
 		panelAgregarTrabajadores.setBorder(new TitledBorder(new LineBorder(new Color(0, 88, 168)), "Agregar Trabajador", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		panelAgregarTrabajadores.setBackground(UIManager.getColor("Button.light"));
@@ -107,34 +116,34 @@ public class AgregarTrabajador extends JDialog {
 		nombreT = new JTextField();
 		nombreT.setFont(new Font("Arial", Font.PLAIN, 15));
 		nombreT.setForeground(UIManager.getColor("Button.foreground"));
-		nombreT.setBounds(247, 54, 445, 20);
+		nombreT.setBounds(247, 54, 560, 20);
 		panelAgregarTrabajadores.add(nombreT);
 		nombreT.setColumns(10);
 
 		apellidosT = new JTextField();
 		apellidosT.setFont(new Font("Arial", Font.PLAIN, 15));
 		apellidosT.setColumns(10);
-		apellidosT.setBounds(247, 82, 445, 20);
+		apellidosT.setBounds(247, 82, 560, 20);
 		panelAgregarTrabajadores.add(apellidosT);
 
 		CiT = new JTextField();
 		CiT.setFont(new Font("Arial", Font.PLAIN, 15));
 		CiT.setColumns(10);
-		CiT.setBounds(247, 110, 445, 20);
+		CiT.setBounds(247, 110, 560, 20);
 		panelAgregarTrabajadores.add(CiT);
 
 		salarioT = new JTextField();
 		salarioT.setFont(new Font("Arial", Font.PLAIN, 15));
 		salarioT.setColumns(10);
-		salarioT.setBounds(247, 138, 445, 20);
+		salarioT.setBounds(247, 138, 560, 20);
 		panelAgregarTrabajadores.add(salarioT);
 
 		NivelE = new JComboBox<>();
-		NivelE.setBounds(247, 166, 445, 20);
+		NivelE.setBounds(247, 166, 560, 20);
 		panelAgregarTrabajadores.add(NivelE);
 
 		cargoT = new JComboBox<>();
-		cargoT.setBounds(247, 194, 445, 20);
+		cargoT.setBounds(247, 194, 560, 20);
 		panelAgregarTrabajadores.add(cargoT);
 
 		llenarComboBox(NivelE, InicializacionDeDatos.nivelesEscolar());
@@ -164,10 +173,6 @@ public class AgregarTrabajador extends JDialog {
 		numTrabajador.setColumns(10);
 		iniciarDatos();
 
-		btnAgregar = new JButton("Agregar Trabajador/Gerente");
-		btnAgregar.setBounds(247, 250, 445, 25);
-		panelAgregarTrabajadores.add(btnAgregar);
-
 		cargoT.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if (cargoT.getSelectedItem().equals("Gerente")) {
@@ -180,11 +185,20 @@ public class AgregarTrabajador extends JDialog {
 			}
 		});
 		iniciarDatos();
+
+		JButton btnBorrar = new JButton("Limpiar");
+		btnBorrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				iniciarDatos();
+			}
+		});
+		btnBorrar.setBounds(737, 263, 70, 22);
+		panelAgregarTrabajadores.add(btnBorrar);
+
+		JButton btnAgregar = new JButton("Agregar");
 		btnAgregar.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				boolean datoIncorrecto = false;
-				int noTrabajador = 0;
 				String nombre = nombreT.getText();
 				String apellidos = apellidosT.getText();
 				String ci = CiT.getText();
@@ -203,15 +217,14 @@ public class AgregarTrabajador extends JDialog {
 						datoIncorrecto = true;
 					}
 				}
-
-				if (nombre.trim().isEmpty() || !nombre.matches("[a-zA-Z]+")) {
+				if (nombre.trim().isEmpty() || !nombre.matches("[a-zA-Z·ÈÌÛ˙¡…Õ”⁄Ò— ]+$")) {
 					lblnombreT.setForeground(Color.RED);
 					datoIncorrecto = true;
 				} else {
 					lblnombreT.setForeground(Color.BLACK);
 				}
 
-				if (apellidos.trim().isEmpty() || !apellidos.matches("[a-zA-Z]+")) {
+				if (apellidos.isEmpty() || !apellidos.matches("[a-zA-Z·ÈÌÛ˙¡…Õ”⁄Ò— ]+$")) {
 					lblApellidosT.setForeground(Color.RED);
 					datoIncorrecto = true;
 				} else {
@@ -252,9 +265,11 @@ public class AgregarTrabajador extends JDialog {
 						} else {
 							trabajador = new Trabajador(noTrabajador, nombre, apellidos, ci, salario, nivelE, cargo);
 						}
-						tienda.agregarTrabajador(trabajador);
 						trab = trabajador;
-						JOptionPane.showMessageDialog(AgregarTrabajador.this, "Trabajador agregado de manera satisfactoria");
+						trabaj.add(trab);
+						noT.add(noTrabajador);
+
+						JOptionPane.showMessageDialog(AgregarTrabajador.this, "Trabajador agregado a la tabla de manera satisfactoria");
 
 						if (cargo.equals("Gerente")) {
 							SimpleDateFormat formFecha = new SimpleDateFormat("dd/mm/yyyy");
@@ -263,7 +278,7 @@ public class AgregarTrabajador extends JDialog {
 						} else {
 							tableModel.addRow(new Object[]{noTrabajador, nombre, apellidos, ci, salario, nivelE, cargo, ""});
 						}
-
+						i++;
 						iniciarDatos();
 					} catch (NumberFormatException ex) {
 						JOptionPane.showMessageDialog(AgregarTrabajador.this, "El salario debe ser un n˙mero v·lido.");
@@ -271,28 +286,12 @@ public class AgregarTrabajador extends JDialog {
 				}
 			}
 
-
 		});
-		btnAgregar.setBounds(583, 263, 70, 22);
+		btnAgregar.setBounds(656, 263, 70, 22);
 		panelAgregarTrabajadores.add(btnAgregar);
 
-		btnEliminar = new JButton("Eliminar");
-		btnEliminar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int pos = table.getSelectedRow();
-				if (pos != -1) {
-					tienda.eliminarTrabajador(pos);
-					((DefaultTableModel) table.getModel()).removeRow(pos);
-				} else {
-					JOptionPane.showMessageDialog(AgregarTrabajador.this, "Antes de eliminar debe de seleccionar un trabajador de la tabla");
-				}
-			}
-		});
-		btnEliminar.setBounds(670, 263, 70, 22);
-		panelAgregarTrabajadores.add(btnEliminar);
-
 		JPanel panelTrabajadoresAgregados = new JPanel();
-		panelTrabajadoresAgregados.setBounds(29, 448, 837, 188);
+		panelTrabajadoresAgregados.setBounds(29, 399, 837, 237);
 		panelTrabajadoresAgregados.setBorder(new TitledBorder(null, "Trabajadores Agregados", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panelTrabajadoresAgregados.setBackground(UIManager.getColor("Button.disabledShadow"));
 		panel.add(panelTrabajadoresAgregados);
@@ -313,42 +312,76 @@ public class AgregarTrabajador extends JDialog {
 		panelTrabajadoresAgregados.add(scrollPane, BorderLayout.CENTER);
 
 		JLabel lblNewLabel = new JLabel("New label");
-		lblNewLabel.setBounds(22, 55, 76, 60);
+		lblNewLabel.setBounds(12, 12, 76, 60);
 		lblNewLabel.setIcon(new ImageIcon(AgregarTrabajador.class.getResource("/gui/icons/logoPeque\u00F1o1.jpg")));
 		panel.add(lblNewLabel);
-				
-				panel_1 = new JPanel();
-				panel_1.setBackground(Color.WHITE);
-				panel_1.setBounds(0, 683, 890, 33);
-				contentPanel.add(panel_1);
-						panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-						
-						btnAtrs = new JButton("Atr\u00E1s");
-						btnAtrs.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent e) {
-								dispose();
-							}
-						});
-						panel_1.add(btnAtrs);
-				
-						btnGuardar = new JButton("Aceptar");
-						panel_1.add(btnGuardar);
-						
-								btnCancelar = new JButton("Cancelar");
-								panel_1.add(btnCancelar);
-								btnCancelar.addActionListener(new ActionListener() {
-									public void actionPerformed(ActionEvent e) {
-										dispose();
-									}
-								});
-						btnGuardar.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent e) {
-								if(actualizarLista() == true) {
-									actualizarLista();
-									JOptionPane.showMessageDialog(AgregarTrabajador.this, "Trabajador guardado satisfactoriamente");
-								}
-							}
-						});
+
+		btnEliminar = new JButton("Eliminar");
+		btnEliminar.setBounds(797, 647, 70, 22);
+		panel.add(btnEliminar);
+		btnEliminar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int pos = table.getSelectedRow();
+				if (pos != -1) {
+					//tienda.eliminarTrabajador1(pos);
+					trabaj.remove(pos);
+					/*if(actualizarNo() != 0) {
+						numTrabajador.setText(String.valueOf(actualizarNo()));
+					}*/
+					((DefaultTableModel) table.getModel()).removeRow(pos);
+				} else {
+					JOptionPane.showMessageDialog(AgregarTrabajador.this, "Antes de eliminar debe de seleccionar un trabajador de la tabla");
+				}
+			}
+
+			private int actualizarNo() {
+				int j = 0;
+				int num = 0;
+				Integer o;
+				while(j < noT.size()) {
+						o = noT.get(j);
+						if(!trabaj.contains(o)) {
+							num = noT.get(j);
+						}
+						else {
+							j++;
+						}
+					}
+				return num;
+			}
+		});
+
+		panel_1 = new JPanel();
+		panel_1.setBackground(Color.WHITE);
+		panel_1.setBounds(0, 683, 890, 33);
+		contentPanel.add(panel_1);
+		panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+
+		btnAtrs = new JButton("Atr\u00E1s");
+		btnAtrs.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		panel_1.add(btnAtrs);
+
+		btnGuardar = new JButton("Aceptar");
+		panel_1.add(btnGuardar);
+
+		btnCancelar = new JButton("Cancelar");
+		panel_1.add(btnCancelar);
+		btnCancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		btnGuardar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(actualizarLista() == true) {
+					JOptionPane.showMessageDialog(AgregarTrabajador.this, "Cambios guardados satisfactoriamente");
+				}
+			}
+		});
 	}
 
 	private void llenarComboBox(JComboBox<String> comboBox, ArrayList<String> items) {
@@ -358,17 +391,17 @@ public class AgregarTrabajador extends JDialog {
 	}
 	private boolean actualizarLista() {
 		boolean act = false;
-		if(trab != null) {
-			tienda.getTrabajadores().add(trab);
+		if(!trabaj.isEmpty()) {
+			tienda.agregarT(trabaj);
 			act = true;
 		}
 		else {
-			JOptionPane.showMessageDialog(AgregarTrabajador.this, "Antes de guardar debe de agregar un trabajador");
+			JOptionPane.showMessageDialog(AgregarTrabajador.this, "No se ha realizado ning˙n cambio");
 		}
 		return act;
 	}
 	private void iniciarDatos() {
-		numTrabajador.setText(String.valueOf(tienda.getUltimoNoTrabajador() + 1));
+		actualizarNoTrabajador();
 		nombreT.setText("");
 		apellidosT.setText("");
 		CiT.setText("");
@@ -379,4 +412,18 @@ public class AgregarTrabajador extends JDialog {
 		spinnerFecha.setVisible(false);
 		fechaOcupTextLabel.setVisible(false);
 	}
+
+
+	private void actualizarNoTrabajador() {
+		if( tienda.noTrabajadorAct() != tienda.getCantTrabajadores()) {
+			numTrabajador.setText(String.valueOf(tienda.noTrabajadorAct()));
+		}
+		else  {
+			numTrabajador.setText(String.valueOf(tienda.getUltimoNoTrabajador() + i));
+		}
+	}
+
+
+
+
 }
